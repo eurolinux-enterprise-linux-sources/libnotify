@@ -1,27 +1,20 @@
-%define dbus_version            0.90
-%define dbus_glib_version       0.70
 %define glib2_version           2.26.0
 
-Summary: Desktop notification library
 Name: libnotify
-Version: 0.7.5
-Release: 8%{?dist}
+Version: 0.7.7
+Release: 1%{?dist}
+Summary: Desktop notification library
+
+License: LGPLv2+
 URL: http://www.gnome.org
 Source0: http://ftp.gnome.org/pub/GNOME/sources/libnotify/0.7/%{name}-%{version}.tar.xz
-License: LGPLv2+
-Group: System Environment/Libraries
-BuildRequires: libtool
+
+BuildRequires: chrpath
 BuildRequires: glib2-devel >= %{glib2_version}
 BuildRequires: gdk-pixbuf2-devel
 BuildRequires: gtk3-devel
-BuildRequires: dbus-devel >= %{dbus_version}
-BuildRequires: dbus-glib-devel >= %{dbus_glib_version}
 BuildRequires: gobject-introspection-devel
-BuildRequires: perl-Carp
-Requires: glib2 >= %{glib2_version}
-#Fix support for ARM 
-#https://bugzilla.redhat.com/show_bug.cgi?id=925824
-Patch0: libnotify-aarch64.patch
+Requires: glib2%{?_isa} >= %{glib2_version}
 
 %description
 libnotify is a library for sending desktop notifications to a notification
@@ -31,12 +24,7 @@ form of information without getting in the user's way.
 
 %package devel
 Summary:        Development files for %{name}
-Group:          Development/Libraries
-Requires:       %{name} = %{version}-%{release}
-Requires:       glib2-devel >= %{glib2_version}
-Requires:       dbus-devel >= %{dbus_version}
-Requires:       dbus-glib-devel >= %{dbus_glib_version}
-Requires:       pkgconfig
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 This package contains libraries and header files needed for
@@ -44,14 +32,16 @@ development of programs using %{name}.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 %configure
 make %{?_smp_mflags}
 
 %install
-make install DESTDIR=$RPM_BUILD_ROOT
+%make_install
+
+# Remove lib64 rpaths
+chrpath --delete $RPM_BUILD_ROOT%{_bindir}/notify-send
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.a
@@ -61,8 +51,8 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.a
 %postun -p /sbin/ldconfig
 
 %files
-%doc COPYING NEWS AUTHORS
-
+%license COPYING
+%doc NEWS AUTHORS
 %{_bindir}/notify-send
 %{_libdir}/libnotify.so.*
 %{_libdir}/girepository-1.0/Notify-0.7.typelib
@@ -77,6 +67,10 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.a
 %{_datadir}/gir-1.0/Notify-0.7.gir
 
 %changelog
+* Fri Oct 14 2016 Kalev Lember <klember@redhat.com> - 0.7.7-1
+- Update to 0.7.7
+- Resolves: #1387013
+
 * Tue May 05 2015 Ray Strode <rstrode@redhat.com> 0.7.5-8
 - Don't require desktop notification daemon (breaks a build loop with mutter/gnome-shell)
   Related: #1174722

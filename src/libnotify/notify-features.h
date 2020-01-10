@@ -25,7 +25,7 @@
  */
 #define NOTIFY_VERSION_MAJOR    (0)
 #define NOTIFY_VERSION_MINOR    (7)
-#define NOTIFY_VERSION_MICRO    (5)
+#define NOTIFY_VERSION_MICRO    (7)
 
 /* check whether a version equal to or greater than
  * major.minor.micro is present.
