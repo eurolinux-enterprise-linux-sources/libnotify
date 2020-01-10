@@ -5,7 +5,7 @@
 Summary: Desktop notification library
 Name: libnotify
 Version: 0.7.5
-Release: 5%{?dist}
+Release: 7%{?dist}
 URL: http://www.gnome.org
 Source0: http://ftp.gnome.org/pub/GNOME/sources/libnotify/0.7/%{name}-%{version}.tar.xz
 License: LGPLv2+
@@ -78,6 +78,12 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.a
 %{_datadir}/gir-1.0/Notify-0.7.gir
 
 %changelog
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 0.7.5-7
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 0.7.5-6
+- Mass rebuild 2013-12-27
+
 * Fri Mar 22 2013 Dan Mashal <dan.mashal@fedoraproject.org> - 0.7.5-5
 - Fix RHBZ #925824
 - Update source URL
