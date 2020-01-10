@@ -5,7 +5,7 @@
 Summary: Desktop notification library
 Name: libnotify
 Version: 0.7.5
-Release: 7%{?dist}
+Release: 8%{?dist}
 URL: http://www.gnome.org
 Source0: http://ftp.gnome.org/pub/GNOME/sources/libnotify/0.7/%{name}-%{version}.tar.xz
 License: LGPLv2+
@@ -19,7 +19,6 @@ BuildRequires: dbus-glib-devel >= %{dbus_glib_version}
 BuildRequires: gobject-introspection-devel
 BuildRequires: perl-Carp
 Requires: glib2 >= %{glib2_version}
-Requires: desktop-notification-daemon
 #Fix support for ARM 
 #https://bugzilla.redhat.com/show_bug.cgi?id=925824
 Patch0: libnotify-aarch64.patch
@@ -78,6 +77,10 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.a
 %{_datadir}/gir-1.0/Notify-0.7.gir
 
 %changelog
+* Tue May 05 2015 Ray Strode <rstrode@redhat.com> 0.7.5-8
+- Don't require desktop notification daemon (breaks a build loop with mutter/gnome-shell)
+  Related: #1174722
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 0.7.5-7
 - Mass rebuild 2014-01-24
 
